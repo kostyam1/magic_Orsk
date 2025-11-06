@@ -10,27 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: 0.12 });
   animated.forEach(el => io.observe(el));
-});
 
-// ====== FAQ ======
-document.addEventListener('DOMContentLoaded', () => {
-  const items = document.querySelectorAll('.faq-item');
-  items.forEach(item => {
+  // ====== FAQ ======
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
     const q = item.querySelector('.faq-question');
     q.addEventListener('click', () => {
-      items.forEach(i => { if (i !== item) i.classList.remove('active'); });
+      faqItems.forEach(i => { if (i !== item) i.classList.remove('active'); });
       item.classList.toggle('active');
     });
   });
-});
 
-// ====== Валидация и отправка формы ======
-document.addEventListener('DOMContentLoaded', function() {
+  // ====== Валидация и отправка формы ======
   const form = document.getElementById('contactForm');
   const popup = document.getElementById('popup');
   const closePopup = document.getElementById('closePopup');
 
-  form.addEventListener('submit', async function(e) {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const name = form.name.value.trim();
@@ -44,32 +40,27 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    // ⚠️ токен и chat_id лучше хранить на сервере или в .env, а не в коде
-    const BOT_TOKEN = 'ЗДЕСЬ_ТОКЕН_НА_СЕРВЕРЕ';
-    const CHAT_ID = '1080472563';
-
-    const text =
-`✨ *Новая заявка с сайта*
-👤 Имя: ${name}
-📞 Телефон: ${phone}
-💬 Сообщение: ${message}`;
-
     try {
-      const resp = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      const resp = await fetch('send.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'Markdown' })
+        body: JSON.stringify({ name, phone, message })
       });
 
-      if (!resp.ok) throw new Error(await resp.text());
-      popup.classList.add('active');
-      form.reset();
+      const result = await resp.json();
+      if (result.success) {
+        popup.classList.add('active');
+        form.reset();
+      } else {
+        alert('Ошибка: ' + (result.error || 'не удалось отправить сообщение'));
+      }
     } catch (err) {
-      console.error('Ошибка Telegram:', err);
-      alert('Не удалось отправить сообщение. Попробуйте позже.');
+      console.error('Ошибка отправки:', err);
+      alert('Произошла ошибка при отправке. Попробуйте позже.');
     }
   });
 
+  // ====== Закрытие popup ======
   closePopup.addEventListener('click', () => popup.classList.remove('active'));
   popup.addEventListener('click', (e) => {
     if (e.target === popup) popup.classList.remove('active');
