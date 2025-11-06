@@ -26,17 +26,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const popup = document.getElementById('popup');
   const closePopup = document.getElementById('closePopup');
 
+  const clearErrors = () => {
+    form.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+  };
+
+  form.addEventListener('input', clearErrors);
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    clearErrors();
 
     const name = form.name.value.trim();
     const phone = form.phone.value.trim();
     const message = form.message.value.trim();
 
-    // проверка телефона
+    let hasError = false;
     const phonePattern = /^\+?[78]\d{10}$/;
+
+    // проверка имени
+    if (name.length < 2) {
+      form.name.classList.add('error');
+      hasError = true;
+    }
+
+    // проверка телефона
     if (!phonePattern.test(phone)) {
-      alert('Введите корректный номер телефона в формате +7XXXXXXXXXX');
+      form.phone.classList.add('error');
+      hasError = true;
+    }
+
+    // проверка сообщения
+    if (message.length < 3) {
+      form.message.classList.add('error');
+      hasError = true;
+    }
+
+    if (hasError) {
+      alert('Проверьте правильность заполнения формы.');
       return;
     }
 

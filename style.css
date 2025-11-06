@@ -538,6 +538,14 @@ textarea {
   font-weight: 700;
   cursor: pointer;
 }
+/* Подсветка ошибок в форме */
+.contact-form input.error,
+.contact-form textarea.error {
+  border-color: #ff4d4d !important;
+  background: #ff4d4d10 !important;
+  box-shadow: 0 0 6px #ff4d4d55;
+}
+
 @keyframes popIn {
   from { transform: scale(.85); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
@@ -588,3 +596,4 @@ footer {
   .gallery-grid { grid-template-columns: 1fr; }
   .gallery-item.large { grid-column: span 1; }
 }
+              
