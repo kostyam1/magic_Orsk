@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Disallow: /media/old/
+Disallow: /send.php
+Disallow: /tmp/
+Disallow: /test/
+
+Host: фокусник-константин.рф
+Sitemap: https://фокусник-константин.рф/sitemap.xml
