@@ -392,7 +392,7 @@ textarea {
   line-height: 1.6;
 }
 .faq-item.active .faq-answer {
-  max-height: 220px;
+  max-height: 260px;
   opacity: 1;
   margin-bottom: .8rem;
 }
